@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="sr-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>ebanka.rs prototip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&family=Manrope:wght@700;800&display=swap">
+<style>
+  :root {
+    --bg: #F1F3F6;
+    --surface: #FFFFFF;
+    --surface-2: #F6F7F9;
+    --ink: #101828;
+    --ink-2: #4B5565;
+    --ink-3: #8A94A6;
+    --line: #DDE2EA;
+    --line-2: #C9D0DB;
+    --brand: #1D4ED8;
+    --brand-ink: #FFFFFF;
+    --brand-soft: #E4ECFD;
+    --brand-deep: #0F2A6B;
+    --go: #148A4B;
+    --go-ink: #FFFFFF;
+    --go-soft: #DDF3E6;
+    --up: #148A4B;
+    --down: #C62F2F;
+    --star: #E8A317;
+    --shadow: 0 1px 0 rgba(16,24,40,.04), 0 10px 28px -14px rgba(16,24,40,.22);
+    --display: "Manrope", "Golos Text", "Segoe UI", Arial, sans-serif;
+    --body: "Golos Text", "Segoe UI", Arial, sans-serif;
+    --r: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1420; --surface: #171E2E; --surface-2: #1E2739;
+      --ink: #EEF1F7; --ink-2: #B4BCCB; --ink-3: #7C879B;
+      --line: #2A3448; --line-2: #3A465C;
+      --brand: #6D95FF; --brand-ink: #0B1633; --brand-soft: #1E2C55; --brand-deep: #0B1633;
+      --go: #37C777; --go-ink: #06210F; --go-soft: #17372A;
+      --up: #4FD08A; --down: #F0716B; --star: #F3B72E;
+      --shadow: 0 1px 0 rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1420; --surface: #171E2E; --surface-2: #1E2739;
+    --ink: #EEF1F7; --ink-2: #B4BCCB; --ink-3: #7C879B;
+    --line: #2A3448; --line-2: #3A465C;
+    --brand: #6D95FF; --brand-ink: #0B1633; --brand-soft: #1E2C55; --brand-deep: #0B1633;
+    --go: #37C777; --go-ink: #06210F; --go-soft: #17372A;
+    --up: #4FD08A; --down: #F0716B; --star: #F3B72E;
+    --shadow: 0 1px 0 rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 18px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.1; letter-spacing: -.02em; text-wrap: balance; }
+  h2 { font-size: 34px; font-weight: 800; }
+  h3 { font-size: 22px; font-weight: 700; }
+  p { margin: 0; }
+  button { font: inherit; cursor: pointer; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding-inline: clamp(16px, 3vw, 32px); }
+  .num { font-variant-numeric: tabular-nums; }
+  .muted { color: var(--ink-3); }
+
+  /* buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 22px; border-radius: 8px; border: 1px solid transparent; font-weight: 600; font-size: 17px; white-space: nowrap; }
+  .btn-go { background: var(--go); color: var(--go-ink); }
+  .btn-go:hover { filter: brightness(1.06); }
+  .btn-brand { background: var(--brand); color: var(--brand-ink); }
+  .btn-ghost { background: transparent; border-color: var(--line-2); color: var(--ink); }
+  .btn-ghost:hover { background: var(--surface-2); }
+  .btn-sm { padding: 10px 16px; font-size: 16px; }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+  /* proto strip */
+  .proto { background: var(--brand-deep); color: #DCE6FF; font-size: 14px; padding: 6px 0; }
+  .proto .wrap { display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between; }
+  .proto b { color: #FFFFFF; }
+
+  /* header */
+  .top { background: var(--surface); border-bottom: 1px solid var(--line); }
+  .top-row { display: flex; align-items: stretch; gap: 28px; min-height: 76px; }
+  .logo { align-self: center; display: inline-flex; align-items: center; gap: 11px; font-family: var(--display); font-weight: 800; font-size: 29px; letter-spacing: -.035em; line-height: 1; color: var(--ink); }
+  .search-btn { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); }
+  .search-btn:hover, .search-btn[aria-expanded="true"] { background: var(--surface-2); color: var(--brand); }
+  .search-btn svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; }
+  .search-panel { padding-block: 4px 14px; }
+  .search { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line-2); border-radius: 8px; padding: 0 6px 0 14px; height: 56px; background: var(--surface-2); }
+  .search:focus-within { border-color: var(--brand); }
+  .search .close { border: 0; background: transparent; color: var(--ink-3); font-size: 16px; font-weight: 600; padding: 8px 12px; border-radius: 6px; }
+  .search .close:hover { color: var(--ink); background: var(--surface); }
+  .search svg { width: 20px; height: 20px; stroke: var(--ink-3); fill: none; stroke-width: 2; flex: none; }
+  .search input { flex: 1; border: 0; background: transparent; color: var(--ink); font: inherit; font-size: 19px; min-width: 0; }
+  .search input:focus { outline: none; }
+  .top-links { display: flex; align-items: center; gap: 12px; margin-left: auto; align-self: center; font-size: 16px; font-weight: 500; }
+  .nav { display: flex; align-items: stretch; gap: 2px; }
+  .nav > a, .more-btn { display: flex; align-items: center; gap: 6px; padding: 0 12px; font-weight: 600; font-size: 17px; white-space: nowrap; color: var(--ink-2); background: none; border: 0; border-block: 3px solid transparent; }
+  .nav > a:hover, .more-btn:hover, .more-btn[aria-expanded="true"] { color: var(--ink); }
+  .nav > a.on { color: var(--ink); border-bottom-color: var(--brand); }
+  .nav .extra { display: none; }
+  .more-wrap { position: relative; display: flex; }
+  .more-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+  .more-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .more-menu { position: absolute; top: calc(100% + 1px); right: 0; min-width: 220px; display: flex; flex-direction: column; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); z-index: 20; }
+  .more-menu[hidden] { display: none; }
+  .more-menu a { padding: 11px 14px; border-radius: 6px; font-size: 17px; font-weight: 500; }
+  .more-menu a:hover { background: var(--surface-2); color: var(--brand); }
+  .more-menu hr { border: 0; border-top: 1px solid var(--line); margin: 6px 4px; }
+  .city-wrap { position: relative; }
+  .city-btn { display: flex; align-items: center; gap: 6px; height: 44px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 17px; font-weight: 600; white-space: nowrap; }
+  .city-btn:hover, .city-btn[aria-expanded="true"] { background: var(--surface-2); color: var(--brand); }
+  .city-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; flex: none; }
+  .city-pop { position: absolute; top: calc(100% + 10px); right: 0; width: min(380px, calc(100vw - 32px)); padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); z-index: 30; }
+  .city-pop[hidden] { display: none; }
+  .city-pop h3 { font-size: 20px; margin-bottom: 12px; }
+  .city-pop input { width: 100%; height: 48px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--surface-2); color: var(--ink); font: inherit; font-size: 17px; }
+  .city-pop input:focus { outline: none; border-color: var(--brand); }
+  .city-list { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 8px; margin-top: 10px; max-height: 300px; overflow-y: auto; }
+  .city-list button { text-align: left; padding: 9px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--ink); font-size: 17px; }
+  .city-list button:hover { background: var(--surface-2); color: var(--brand); }
+  .city-list button[aria-pressed="true"] { color: var(--brand); font-weight: 700; background: var(--brand-soft); }
+  .city-empty { grid-column: 1 / -1; padding: 10px; color: var(--ink-3); font-size: 16px; }
+  @media (max-width: 1180px) {
+    .top-row { flex-wrap: wrap; gap: 0 16px; min-height: 0; padding-top: 12px; }
+    .nav { order: 3; flex-basis: 100%; overflow-x: auto; scrollbar-width: none; margin-top: 4px; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav > a { padding: 12px 12px; }
+    .nav .extra { display: flex; }
+    .more-wrap { display: none; }
+  }
+
+  /* hero */
+  .hero { padding-block: 40px 28px; }
+  .hero h1 { font-size: clamp(36px, 5vw, 58px); font-weight: 800; max-width: 18ch; }
+  .hero h1 em { font-style: normal; color: var(--brand); }
+  .hero p.sub { font-size: 20px; color: var(--ink-2); margin-top: 12px; max-width: 52ch; }
+  .picker { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .tabs { display: flex; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+  .tabs button { flex: none; background: none; border: 0; padding: 18px 22px; font-size: 17px; font-weight: 600; color: var(--ink-2); border-bottom: 3px solid transparent; margin-bottom: -1px; }
+  .tabs button[aria-selected="true"] { color: var(--brand); border-bottom-color: var(--brand); }
+  .picker-body { display: grid; grid-template-columns: 1.1fr 1.1fr 1fr auto; gap: 18px; padding: 22px; align-items: end; }
+  .field label { display: block; font-size: 15px; font-weight: 600; color: var(--ink-2); margin-bottom: 8px; }
+  .field .in { display: flex; align-items: center; border: 1px solid var(--line-2); border-radius: 8px; height: 56px; padding: 0 14px; background: var(--surface); gap: 8px; }
+  .field .in input { flex: 1; border: 0; background: transparent; font: inherit; font-size: 22px; font-weight: 700; color: var(--ink); min-width: 0; }
+  .field .in input:focus { outline: none; }
+  .field .in .unit { font-size: 16px; color: var(--ink-3); font-weight: 600; }
+  .field input[type=range] { width: 100%; margin-top: 10px; accent-color: var(--brand); }
+  .result { border-left: 1px solid var(--line); padding-left: 18px; }
+  .result .lbl { font-size: 15px; color: var(--ink-2); font-weight: 600; }
+  .result .val { font-family: var(--display); font-size: 34px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+  .result .val small { font-size: 16px; font-weight: 600; color: var(--ink-3); letter-spacing: 0; }
+  .picker-foot { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 0 22px 18px; font-size: 15px; color: var(--ink-3); }
+
+  /* layout */
+  .cols { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 32px; padding-block: 16px 64px; align-items: start; }
+  .main { display: flex; flex-direction: column; gap: 44px; min-width: 0; }
+  .side { display: flex; flex-direction: column; gap: 24px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
+
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+  .sec-head a.all { color: var(--brand); font-weight: 600; font-size: 17px; }
+
+  /* offers */
+  .offers { display: flex; flex-direction: column; gap: 12px; }
+  .offer { display: grid; grid-template-columns: 220px 1fr 1fr 1fr auto; align-items: center; gap: 20px; padding: 18px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+  .offer.best { border-color: var(--go); box-shadow: 0 0 0 3px var(--go-soft); }
+  .bank { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .bank .lg { width: 48px; height: 48px; border-radius: 8px; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 16px; color: #fff; flex: none; letter-spacing: -.02em; }
+  .bank .nm { font-weight: 700; font-size: 17px; line-height: 1.2; }
+  .bank .pr { font-size: 15px; color: var(--ink-3); }
+  .kv .k { font-size: 14px; color: var(--ink-3); font-weight: 500; text-transform: uppercase; letter-spacing: .04em; }
+  .kv .v { font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+  .kv .v small { font-size: 15px; font-weight: 600; color: var(--ink-3); letter-spacing: 0; }
+  .badge { display: inline-block; font-size: 13px; font-weight: 700; padding: 3px 8px; border-radius: 5px; background: var(--go-soft); color: var(--go); margin-bottom: 4px; letter-spacing: .02em; }
+
+  /* rating */
+  .rating { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+  .rating table { width: 100%; border-collapse: collapse; }
+  .rating th { text-align: left; font-size: 14px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+  .rating td { padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .rating tr:last-child td { border-bottom: 0; }
+  .rating .pos { font-family: var(--display); font-weight: 800; font-size: 22px; color: var(--ink-3); width: 40px; }
+  .score { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 800; font-size: 24px; }
+  .stars { color: var(--star); letter-spacing: 1px; font-size: 16px; }
+  .delta { font-weight: 700; font-size: 15px; }
+  .delta.up { color: var(--up); } .delta.down { color: var(--down); }
+
+  /* news */
+  .news { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+  .news-main { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .news-main h3 { font-size: 28px; }
+  .news-main p { color: var(--ink-2); font-size: 17px; max-width: 60ch; }
+  .news-list { display: flex; flex-direction: column; }
+  .news-list a { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .news-list a:last-child { border-bottom: 0; }
+  .news-list .t { font-weight: 600; font-size: 17px; line-height: 1.3; }
+  .news-list .d { font-size: 14px; color: var(--ink-3); margin-top: 4px; }
+  .kicker { font-size: 14px; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .06em; }
+
+  /* calculators */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .tile:hover { border-color: var(--brand); }
+  .tile .t { font-weight: 700; font-size: 18px; }
+  .tile .s { font-size: 15px; color: var(--ink-3); }
+  .tile svg { width: 28px; height: 28px; stroke: var(--brand); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 6px; }
+
+  /* sidebar widgets */
+  .widget { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; }
+  .widget h3 { font-size: 20px; margin-bottom: 4px; }
+  .widget .sub { font-size: 14px; color: var(--ink-3); margin-bottom: 12px; }
+  .fx { width: 100%; border-collapse: collapse; }
+  .fx td { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 17px; }
+  .fx tr:last-child td { border-bottom: 0; }
+  .fx .cc { font-weight: 700; }
+  .fx .cn { font-size: 14px; color: var(--ink-3); display: block; }
+  .fx .rt { text-align: right; font-family: var(--display); font-weight: 800; font-size: 20px; }
+  .fx .ch { text-align: right; font-size: 14px; font-weight: 700; width: 64px; }
+  .fx .ch.up { color: var(--up); } .fx .ch.down { color: var(--down); }
+  .widget .more { display: block; margin-top: 12px; color: var(--brand); font-weight: 600; font-size: 16px; }
+  .topb { display: flex; flex-direction: column; }
+  .topb a { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 17px; }
+  .topb a:last-child { border-bottom: 0; }
+  .topb .lg { width: 34px; height: 34px; border-radius: 7px; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 13px; color: #fff; flex: none; }
+  .topb .n { font-weight: 600; flex: 1; }
+  .topb .c { font-size: 14px; color: var(--ink-3); }
+  .widget.promo { background: var(--brand-deep); color: #fff; border-color: transparent; }
+  .widget.promo h3 { color: #fff; font-size: 24px; }
+  .widget.promo p { color: #C9D6F5; font-size: 16px; margin-bottom: 14px; }
+  .widget.promo .btn { background: #fff; color: var(--brand-deep); }
+
+  /* footer */
+  footer { background: var(--surface); border-top: 1px solid var(--line); padding-block: 40px 48px; font-size: 16px; }
+  .fcols { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 28px; }
+  .fcols h4 { font-size: 15px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); margin: 0 0 12px; font-weight: 700; }
+  .fcols ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .fcols a:hover { color: var(--brand); }
+  .fabout { color: var(--ink-2); font-size: 15px; max-width: 34ch; margin-top: 10px; }
+  .fbottom { margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+  @media (max-width: 1080px) {
+    .offer { grid-template-columns: 1fr 1fr 1fr; }
+    .offer .bank { grid-column: 1 / -1; }
+    .offer .btn { grid-column: 1 / -1; }
+    .picker-body { grid-template-columns: 1fr 1fr; }
+    .result { border-left: 0; padding-left: 0; }
+  }
+  @media (max-width: 900px) {
+    .cols { grid-template-columns: 1fr; }
+    .side { position: static; }
+    .news { grid-template-columns: 1fr; }
+    .fcols { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    body { font-size: 17px; }
+    h2 { font-size: 28px; }
+    .picker-body { grid-template-columns: 1fr; }
+    .offer { grid-template-columns: 1fr 1fr; padding: 16px; }
+    .fcols { grid-template-columns: 1fr; }
+    .top-row { gap: 14px; }
+    .city-btn .city-name { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="proto"><div class="wrap"><span><b>Prototip</b> · svi podaci na stranici su testni i služe samo za prikaz interfejsa</span><span>v0.1 · 19.09.2026</span></div></div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <a class="logo" href="#" aria-label="ebanka, početna">ebanka</a>
+      <nav class="nav" aria-label="Glavna navigacija">
+        <a href="#" class="on">Krediti</a><a href="#">Kartice</a><a href="#">Štednja</a><a href="#">Kursna lista</a><a href="#">Banke</a><a href="#">Osiguranje</a><a href="#" class="extra">Kalkulatori</a><a href="#" class="extra">Računi</a><a href="#" class="extra">Vesti</a><a href="#" class="extra">Forum</a><a href="#" class="extra">Za banke</a>
+        <div class="more-wrap">
+          <button class="more-btn" type="button" id="more-btn" aria-expanded="false" aria-controls="more-menu">Još<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="more-menu" id="more-menu" hidden>
+            <a href="#">Kalkulatori</a><a href="#">Računi</a><a href="#">Vesti</a><a href="#">Forum</a><hr><a href="#">Za banke</a>
+          </div>
+        </div>
+      </nav>
+      <div class="top-links">
+        <div class="city-wrap">
+          <button class="city-btn" type="button" id="city-btn" aria-expanded="false" aria-controls="city-pop" aria-label="Grad: Beograd. Promeni grad"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span class="city-name" id="city-name">Beograd</span></button>
+          <div class="city-pop" id="city-pop" role="dialog" aria-label="Izbor grada" hidden>
+            <h3>Izaberite grad</h3>
+            <input id="city-q" type="search" placeholder="Pretraga grada…" aria-label="Pretraga grada" autocomplete="off">
+            <div class="city-list" id="city-list"></div>
+          </div>
+        </div>
+        <button class="search-btn" type="button" id="search-btn" aria-label="Pretraga" aria-expanded="false" aria-controls="search-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+        <a href="#" class="btn btn-ghost btn-sm">Prijava</a>
+      </div>
+    </div>
+    <div class="search-panel" id="search-panel" hidden>
+      <form class="search" role="search" onsubmit="return false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="site-search" type="search" placeholder="Banka, kredit, kartica, kurs evra…" aria-label="Pretraga sajta">
+        <button class="close" type="button" id="search-close">Zatvori</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Uporedite ponude <em>svih banaka</em> u Srbiji na jednom mestu</h1>
+    <p class="sub">Krediti, kartice, štednja i kursna lista — ažurirano svakog dana. Bez skrivenih naknada, sa EKS-om koji vidite pre nego što odete u banku.</p>
+
+    <div class="picker">
+      <div class="tabs" role="tablist" aria-label="Vrsta proizvoda">
+        <button role="tab" aria-selected="true" data-tab="kes">Keš kredit</button>
+        <button role="tab" aria-selected="false" data-tab="stambeni">Stambeni kredit</button>
+        <button role="tab" aria-selected="false" data-tab="refi">Refinansiranje</button>
+        <button role="tab" aria-selected="false" data-tab="auto">Auto kredit</button>
+        <button role="tab" aria-selected="false" data-tab="stednja">Štednja</button>
+      </div>
+      <div class="picker-body">
+        <div class="field">
+          <label for="amount" id="amount-label">Iznos kredita</label>
+          <div class="in"><input id="amount" type="text" inputmode="numeric" value="600 000"><span class="unit" id="amount-unit">RSD</span></div>
+          <input id="amount-range" type="range" min="50000" max="3000000" step="10000" value="600000" aria-label="Iznos kredita">
+        </div>
+        <div class="field">
+          <label for="term" id="term-label">Rok otplate</label>
+          <div class="in"><input id="term" type="text" inputmode="numeric" value="5"><span class="unit">godina</span></div>
+          <input id="term-range" type="range" min="1" max="10" step="1" value="5" aria-label="Rok otplate">
+        </div>
+        <div class="result">
+          <div class="lbl" id="res-label">Najniža mesečna rata</div>
+          <div class="val num"><span id="res-val">12 371</span> <small id="res-unit">RSD</small></div>
+          <div class="muted" style="font-size:15px" id="res-sub">EKS od 11,9% · 14 ponuda</div>
+        </div>
+        <button class="btn btn-go" type="button" id="res-btn">Pronađi kredit</button>
+      </div>
+      <div class="picker-foot"><span>Rata je informativna, obračunata po anuitetnoj formuli na osnovu najniže EKS u bazi.</span><span>Podaci od 19.09.2026</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap cols">
+  <main class="main">
+
+    <section>
+      <div class="sec-head"><h2>Najpovoljniji keš krediti</h2><a class="all" href="#">Svih 14 ponuda →</a></div>
+      <div class="offers">
+        <div class="offer best">
+          <div class="bank"><div class="lg" style="background:#0A5C3B">BI</div><div><div class="nm">Banca Intesa</div><div class="pr">Hit keš kredit</div></div></div>
+          <div class="kv"><span class="badge">Najniža rata</span><div class="k">EKS od</div><div class="v num">11,9<small>%</small></div></div>
+          <div class="kv"><div class="k">Rata / 60 mes.</div><div class="v num">12 371 <small>RSD</small></div></div>
+          <div class="kv"><div class="k">Iznos do</div><div class="v num">3 mil. <small>RSD</small></div></div>
+          <a class="btn btn-brand btn-sm" href="#">Podnesi zahtev</a>
+        </div>
+        <div class="offer">
+          <div class="bank"><div class="lg" style="background:#1F8A3A">OTP</div><div><div class="nm">OTP banka</div><div class="pr">Fleks keš kredit</div></div></div>
+          <div class="kv"><div class="k">EKS od</div><div class="v num">12,4<small>%</small></div></div>
+          <div class="kv"><div class="k">Rata / 60 mes.</div><div class="v num">12 519 <small>RSD</small></div></div>
+          <div class="kv"><div class="k">Iznos do</div><div class="v num">2,5 mil. <small>RSD</small></div></div>
+          <a class="btn btn-ghost btn-sm" href="#">Detalji</a>
+        </div>
+        <div class="offer">
+          <div class="bank"><div class="lg" style="background:#F2B705;color:#1B1B1B">RB</div><div><div class="nm">Raiffeisen</div><div class="pr">Keš kredit bez naknade</div></div></div>
+          <div class="kv"><div class="k">EKS od</div><div class="v num">12,8<small>%</small></div></div>
+          <div class="kv"><div class="k">Rata / 60 mes.</div><div class="v num">12 638 <small>RSD</small></div></div>
+          <div class="kv"><div class="k">Iznos do</div><div class="v num">4 mil. <small>RSD</small></div></div>
+          <a class="btn btn-ghost btn-sm" href="#">Detalji</a>
+        </div>
+        <div class="offer">
+          <div class="bank"><div class="lg" style="background:#B01F24">UC</div><div><div class="nm">UniCredit</div><div class="pr">Gotovinski kredit</div></div></div>
+          <div class="kv"><div class="k">EKS od</div><div class="v num">13,1<small>%</small></div></div>
+          <div class="kv"><div class="k">Rata / 60 mes.</div><div class="v num">12 728 <small>RSD</small></div></div>
+          <div class="kv"><div class="k">Iznos do</div><div class="v num">3,5 mil. <small>RSD</small></div></div>
+          <a class="btn btn-ghost btn-sm" href="#">Detalji</a>
+        </div>
+        <div class="offer">
+          <div class="bank"><div class="lg" style="background:#1E3F8A">PŠ</div><div><div class="nm">Poštanska štedionica</div><div class="pr">Keš kredit za penzionere</div></div></div>
+          <div class="kv"><div class="k">EKS od</div><div class="v num">13,6<small>%</small></div></div>
+          <div class="kv"><div class="k">Rata / 60 mes.</div><div class="v num">12 878 <small>RSD</small></div></div>
+          <div class="kv"><div class="k">Iznos do</div><div class="v num">1,5 mil. <small>RSD</small></div></div>
+          <a class="btn btn-ghost btn-sm" href="#">Detalji</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Narodni rejting banaka</h2><a class="all" href="#">Sve banke i recenzije →</a></div>
+      <div class="rating">
+        <table>
+          <thead><tr><th></th><th>Banka</th><th>Ocena</th><th>Recenzija</th><th>Promena za mesec</th></tr></thead>
+          <tbody>
+            <tr><td class="pos num">1</td><td><div class="bank"><div class="lg" style="background:#1F8A3A;width:40px;height:40px;font-size:14px">OTP</div><div class="nm">OTP banka</div></div></td><td><span class="score num">4,6 <span class="stars" aria-hidden="true">★★★★★</span></span></td><td class="num">2 418</td><td><span class="delta up num">▲ 0,1</span></td></tr>
+            <tr><td class="pos num">2</td><td><div class="bank"><div class="lg" style="background:#F2B705;color:#1B1B1B;width:40px;height:40px;font-size:14px">RB</div><div class="nm">Raiffeisen</div></div></td><td><span class="score num">4,5 <span class="stars" aria-hidden="true">★★★★★</span></span></td><td class="num">1 903</td><td><span class="delta up num">▲ 0,2</span></td></tr>
+            <tr><td class="pos num">3</td><td><div class="bank"><div class="lg" style="background:#0A5C3B;width:40px;height:40px;font-size:14px">BI</div><div class="nm">Banca Intesa</div></div></td><td><span class="score num">4,3 <span class="stars" aria-hidden="true">★★★★☆</span></span></td><td class="num">3 771</td><td><span class="delta down num">▼ 0,1</span></td></tr>
+            <tr><td class="pos num">4</td><td><div class="bank"><div class="lg" style="background:#4A2A8A;width:40px;height:40px;font-size:14px">YB</div><div class="nm">Yettel Bank</div></div></td><td><span class="score num">4,2 <span class="stars" aria-hidden="true">★★★★☆</span></span></td><td class="num">1 156</td><td><span class="delta up num">▲ 0,3</span></td></tr>
+            <tr><td class="pos num">5</td><td><div class="bank"><div class="lg" style="background:#1E3F8A;width:40px;height:40px;font-size:14px">PŠ</div><div class="nm">Poštanska štedionica</div></div></td><td><span class="score num">3,9 <span class="stars" aria-hidden="true">★★★★☆</span></span></td><td class="num">2 044</td><td><span class="delta num muted">— 0,0</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Vesti i analize</h2><a class="all" href="#">Sve vesti →</a></div>
+      <div class="news">
+        <a class="news-main" href="#">
+          <span class="kicker">NBS · kamatne stope</span>
+          <h3>NBS zadržala referentnu stopu na 5,75%: šta to znači za rate stambenih kredita</h3>
+          <p>Izvršni odbor Narodne banke Srbije nije menjao referentnu kamatnu stopu treći mesec zaredom. Analiziramo kako se odluka odražava na dinarske i evro-indeksirane kredite.</p>
+          <span class="muted" style="font-size:15px">Danas, 09:40 · 6 min čitanja</span>
+        </a>
+        <div class="news-list">
+          <a href="#"><div class="t">Tri banke snizile kamate na štednju u evrima od oktobra</div><div class="d">Danas, 08:15</div></a>
+          <a href="#"><div class="t">Kako radi IPS plaćanje QR kodom i gde je besplatno</div><div class="d">Juče</div></a>
+          <a href="#"><div class="t">Novi program stambenih kredita za mlade: uslovi i rokovi</div><div class="d">17. septembar</div></a>
+          <a href="#"><div class="t">Uporedili smo naknade za održavanje tekućeg računa u 12 banaka</div><div class="d">16. septembar</div></a>
+          <a href="#"><div class="t">Lažni SMS „iz banke”: kako prepoznati fišing</div><div class="d">15. septembar</div></a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Kalkulatori</h2></div>
+      <div class="tiles">
+        <a class="tile" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h3M13 12h3M8 16h3M13 16h3"/></svg><span class="t">Kreditni kalkulator</span><span class="s">Rata, ukupna kamata, plan otplate</span></a>
+        <a class="tile" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 4 8-8"/><path d="M14 8h6v6"/></svg><span class="t">Kalkulator štednje</span><span class="s">Prinos po roku i valuti</span></a>
+        <a class="tile" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h12l-3-3M20 16H8l3 3"/></svg><span class="t">Konvertor valuta</span><span class="s">Po srednjem kursu NBS</span></a>
+        <a class="tile" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="t">Refinansiranje</span><span class="s">Koliko štedite prelaskom</span></a>
+        <a class="tile" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V9M12 20V4M19 20v-7"/></svg><span class="t">Neto / bruto plata</span><span class="s">Sa porezima i doprinosima</span></a>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Štednja u evrima — najbolje kamate</h2><a class="all" href="#">Sve ponude štednje →</a></div>
+      <div class="offers">
+        <div class="offer">
+          <div class="bank"><div class="lg" style="background:#7A1F5C">AIK</div><div><div class="nm">AIK banka</div><div class="pr">Oročena štednja 12 mes.</div></div></div>
+          <div class="kv"><div class="k">Kamata</div><div class="v num">3,20<small>%</small></div></div>
+          <div class="kv"><div class="k">Minimum</div><div class="v num">500 <small>EUR</small></div></div>
+          <div class="kv"><div class="k">Prinos na 5 000 €</div><div class="v num">+160 <small>EUR</small></div></div>
+          <a class="btn btn-ghost btn-sm" href="#">Detalji</a>
+        </div>
+        <div class="offer">
+          <div class="bank"><div class="lg" style="background:#0E7C86">HB</div><div><div class="nm">Halkbank</div><div class="pr">Štednja plus 24 mes.</div></div></div>
+          <div class="kv"><div class="k">Kamata</div><div class="v num">3,05<small>%</small></div></div>
+          <div class="kv"><div class="k">Minimum</div><div class="v num">1 000 <small>EUR</small></div></div>
+          <div class="kv"><div class="k">Prinos na 5 000 €</div><div class="v num">+310 <small>EUR</small></div></div>
+          <a class="btn btn-ghost btn-sm" href="#">Detalji</a>
+        </div>
+        <div class="offer">
+          <div class="bank"><div class="lg" style="background:#2E6BD6">ER</div><div><div class="nm">Erste banka</div><div class="pr">Oročena štednja 12 mes.</div></div></div>
+          <div class="kv"><div class="k">Kamata</div><div class="v num">2,80<small>%</small></div></div>
+          <div class="kv"><div class="k">Minimum</div><div class="v num">300 <small>EUR</small></div></div>
+          <div class="kv"><div class="k">Prinos na 5 000 €</div><div class="v num">+140 <small>EUR</small></div></div>
+          <a class="btn btn-ghost btn-sm" href="#">Detalji</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <aside class="side">
+    <div class="widget">
+      <h3>Kursna lista NBS</h3>
+      <div class="sub">Srednji kurs · petak, 19. septembar 2026</div>
+      <table class="fx">
+        <tbody>
+          <tr><td><span class="cc">EUR</span><span class="cn">Evro</span></td><td class="rt num">117,18</td><td class="ch down num">−0,02</td></tr>
+          <tr><td><span class="cc">USD</span><span class="cn">Američki dolar</span></td><td class="rt num">100,46</td><td class="ch up num">+0,31</td></tr>
+          <tr><td><span class="cc">CHF</span><span class="cn">Švajcarski franak</span></td><td class="rt num">125,62</td><td class="ch up num">+0,14</td></tr>
+          <tr><td><span class="cc">GBP</span><span class="cn">Britanska funta</span></td><td class="rt num">136,91</td><td class="ch down num">−0,27</td></tr>
+        </tbody>
+      </table>
+      <a class="more" href="#">Kursevi u bankama i menjačnicama →</a>
+    </div>
+
+    <div class="widget">
+      <h3>Najbolji kurs evra danas</h3>
+      <div class="sub">Menjačnice · Beograd · kupovni / prodajni</div>
+      <table class="fx">
+        <tbody>
+          <tr><td><span class="cc">Menjačnica Zlatnik</span><span class="cn">Knez Mihailova 21</span></td><td class="rt num">117,10 / 117,25</td></tr>
+          <tr><td><span class="cc">Euro Exchange</span><span class="cn">Bulevar kralja Aleksandra 84</span></td><td class="rt num">117,08 / 117,28</td></tr>
+          <tr><td><span class="cc">Menjačnica Delta</span><span class="cn">Novi Beograd, blok 21</span></td><td class="rt num">117,05 / 117,30</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="widget">
+      <h3>Najtraženije banke</h3>
+      <div class="sub">Po posetama ove nedelje</div>
+      <div class="topb">
+        <a href="#"><span class="lg" style="background:#0A5C3B">BI</span><span class="n">Banca Intesa</span><span class="c num">3 771 rec.</span></a>
+        <a href="#"><span class="lg" style="background:#1F8A3A">OTP</span><span class="n">OTP banka</span><span class="c num">2 418 rec.</span></a>
+        <a href="#"><span class="lg" style="background:#1E3F8A">PŠ</span><span class="n">Poštanska štedionica</span><span class="c num">2 044 rec.</span></a>
+        <a href="#"><span class="lg" style="background:#F2B705;color:#1B1B1B">RB</span><span class="n">Raiffeisen</span><span class="c num">1 903 rec.</span></a>
+        <a href="#"><span class="lg" style="background:#B01F24">UC</span><span class="n">UniCredit</span><span class="c num">1 640 rec.</span></a>
+      </div>
+      <a class="more" href="#">Sve banke →</a>
+    </div>
+
+    <div class="widget promo">
+      <h3>Proverite svoju kreditnu sposobnost</h3>
+      <p>Za 2 minuta saznajte koliki kredit možete da dobijete — bez upita u Kreditni biro.</p>
+      <a class="btn btn-sm" href="#">Proveri besplatno</a>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <a class="logo" href="#" aria-label="ebanka, početna">ebanka</a>
+        <p class="fabout">Nezavisni finansijski portal. Poredimo proizvode svih banaka u Srbiji, objavljujemo recenzije korisnika i dnevnu kursnu listu.</p>
+      </div>
+      <div><h4>Proizvodi</h4><ul><li><a href="#">Keš krediti</a></li><li><a href="#">Stambeni krediti</a></li><li><a href="#">Kreditne kartice</a></li><li><a href="#">Štednja</a></li><li><a href="#">Tekući računi</a></li></ul></div>
+      <div><h4>Servisi</h4><ul><li><a href="#">Kursna lista</a></li><li><a href="#">Menjačnice</a></li><li><a href="#">Kalkulatori</a></li><li><a href="#">Rečnik pojmova</a></li></ul></div>
+      <div><h4>Banke</h4><ul><li><a href="#">Sve banke</a></li><li><a href="#">Narodni rejting</a></li><li><a href="#">Recenzije</a></li><li><a href="#">Ekspoziture i bankomati</a></li></ul></div>
+      <div><h4>O nama</h4><ul><li><a href="#">Kako ocenjujemo</a></li><li><a href="#">Redakcija</a></li><li><a href="#">Za banke i partnere</a></li><li><a href="#">Kontakt</a></li></ul></div>
+    </div>
+    <div class="fbottom"><span>© 2026 ebanka.rs · prototip sa testnim podacima</span><span>Podaci o proizvodima su informativni; uslove potvrđuje banka.</span></div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var cfg = {
+    kes:      { amt: 'Iznos kredita', unit: 'RSD', min: 50000, max: 3000000, step: 10000, val: 600000, tmin: 1, tmax: 10, tval: 5, eks: 11.9, offers: 14, res: 'Najniža mesečna rata', btn: 'Pronađi kredit' },
+    stambeni: { amt: 'Iznos kredita', unit: 'EUR', min: 10000, max: 300000, step: 1000, val: 80000, tmin: 5, tmax: 30, tval: 25, eks: 5.4, offers: 11, res: 'Najniža mesečna rata', btn: 'Pronađi kredit' },
+    refi:     { amt: 'Dug za refinansiranje', unit: 'RSD', min: 50000, max: 5000000, step: 10000, val: 900000, tmin: 1, tmax: 10, tval: 6, eks: 12.3, offers: 9, res: 'Najniža mesečna rata', btn: 'Uporedi ponude' },
+    auto:     { amt: 'Cena vozila', unit: 'EUR', min: 3000, max: 80000, step: 500, val: 15000, tmin: 1, tmax: 8, tval: 5, eks: 8.9, offers: 7, res: 'Najniža mesečna rata', btn: 'Pronađi kredit' },
+    stednja:  { amt: 'Iznos štednje', unit: 'EUR', min: 100, max: 100000, step: 100, val: 5000, tmin: 1, tmax: 5, tval: 1, eks: 3.2, offers: 12, res: 'Najveći prinos', btn: 'Pronađi štednju' }
+  };
+  var cur = 'kes';
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt = function (n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); };
+  var parse = function (s) { return parseInt(String(s).replace(/\D/g, ''), 10) || 0; };
+
+  function calc() {
+    var c = cfg[cur];
+    var P = parse($('amount').value), years = parse($('term').value);
+    if (cur === 'stednja') {
+      var gain = P * Math.pow(1 + c.eks / 100, years) - P;
+      $('res-val').textContent = '+' + fmt(gain);
+      $('res-sub').textContent = 'kamata do ' + c.eks.toString().replace('.', ',') + '% · ' + c.offers + ' ponuda';
+    } else {
+      var r = c.eks / 100 / 12, n = years * 12;
+      var pay = r ? P * r / (1 - Math.pow(1 + r, -n)) : P / n;
+      $('res-val').textContent = fmt(pay);
+      $('res-sub').textContent = 'EKS od ' + c.eks.toString().replace('.', ',') + '% · ' + c.offers + ' ponuda';
+    }
+  }
+  function setTab(key) {
+    cur = key; var c = cfg[key];
+    $('amount-label').textContent = c.amt; $('amount-unit').textContent = c.unit; $('res-unit').textContent = c.unit;
+    $('res-label').textContent = c.res; $('res-btn').textContent = c.btn;
+    var ar = $('amount-range'); ar.min = c.min; ar.max = c.max; ar.step = c.step; ar.value = c.val; $('amount').value = fmt(c.val);
+    var tr = $('term-range'); tr.min = c.tmin; tr.max = c.tmax; tr.value = c.tval; $('term').value = c.tval;
+    calc();
+  }
+  document.querySelectorAll('.tabs [role=tab]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.tabs [role=tab]').forEach(function (x) { x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      setTab(b.dataset.tab);
+    });
+  });
+  $('amount-range').addEventListener('input', function () { $('amount').value = fmt(this.value); calc(); });
+  $('term-range').addEventListener('input', function () { $('term').value = this.value; calc(); });
+  $('amount').addEventListener('input', function () { var v = parse(this.value); $('amount-range').value = v; calc(); });
+  $('amount').addEventListener('blur', function () { this.value = fmt(parse(this.value)); });
+  $('term').addEventListener('input', function () { var v = parse(this.value); $('term-range').value = v; calc(); });
+  calc();
+
+  var sBtn = $('search-btn'), sPanel = $('search-panel');
+  function openSearch(open) {
+    sPanel.hidden = !open; sBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) $('site-search').focus(); else sBtn.focus();
+  }
+  sBtn.addEventListener('click', function () { openSearch(sPanel.hidden); });
+  $('search-close').addEventListener('click', function () { openSearch(false); });
+  var mBtn = $('more-btn'), mMenu = $('more-menu');
+  function openMore(open) { mMenu.hidden = !open; mBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+  mBtn.addEventListener('click', function (e) { e.stopPropagation(); openMore(mMenu.hidden); });
+  document.addEventListener('click', function (e) {
+    if (!mMenu.hidden && !mMenu.contains(e.target)) openMore(false);
+    if (!cPop.hidden && !cPop.contains(e.target) && !cBtn.contains(e.target)) openCity(false);
+  });
+
+  var cities = ['Beograd', 'Novi Sad', 'Niš', 'Kragujevac', 'Subotica', 'Zrenjanin', 'Pančevo', 'Čačak', 'Kraljevo', 'Novi Pazar', 'Smederevo', 'Leskovac', 'Kruševac', 'Valjevo', 'Šabac', 'Užice', 'Vranje', 'Sombor', 'Požarevac', 'Pirot', 'Zaječar', 'Kikinda', 'Sremska Mitrovica', 'Jagodina'];
+  var cBtn = $('city-btn'), cPop = $('city-pop'), cQ = $('city-q'), cList = $('city-list');
+  var city = 'Beograd';
+  try { city = localStorage.getItem('ebanka-city') || city; } catch (e) {}
+  var norm = function (t) { return t.toLowerCase().replace(/[čć]/g, 'c').replace(/š/g, 's').replace(/ž/g, 'z').replace(/đ/g, 'dj'); };
+  function renderCities() {
+    var q = norm(cQ.value.trim());
+    var list = cities.filter(function (c) { return norm(c).indexOf(q) !== -1; });
+    cList.innerHTML = '';
+    if (!list.length) { cList.innerHTML = '<div class="city-empty">Nema rezultata</div>'; return; }
+    list.forEach(function (c) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = c; b.setAttribute('aria-pressed', c === city ? 'true' : 'false');
+      b.addEventListener('click', function () { setCity(c); openCity(false); cBtn.focus(); });
+      cList.appendChild(b);
+    });
+  }
+  function setCity(c) {
+    city = c; $('city-name').textContent = c; cBtn.setAttribute('aria-label', 'Grad: ' + c + '. Promeni grad');
+    try { localStorage.setItem('ebanka-city', c); } catch (e) {}
+  }
+  function openCity(open) {
+    cPop.hidden = !open; cBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) { cQ.value = ''; renderCities(); cQ.focus(); }
+  }
+  cBtn.addEventListener('click', function (e) { e.stopPropagation(); openMore(false); openCity(cPop.hidden); });
+  cQ.addEventListener('input', renderCities);
+  cQ.addEventListener('keydown', function (e) { if (e.key === 'Enter') { var f = cList.querySelector('button'); if (f) f.click(); } });
+  setCity(city);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (!cPop.hidden) { openCity(false); cBtn.focus(); }
+    else if (!mMenu.hidden) { openMore(false); mBtn.focus(); }
+    else if (!sPanel.hidden) openSearch(false);
+  });
+})();
+</script>
+</body>
+</html>

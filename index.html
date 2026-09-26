@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="sr-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ebanka uskoro</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="ebanka.rs uskoro počinje sa radom: krediti, kartice, štednja, kursna lista i recenzije svih banaka u Srbiji na jednom mestu.">
+<link rel="canonical" href="https://ebanka.rs/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ebanka.rs/">
+<meta property="og:title" content="ebanka.rs — uskoro">
+<meta property="og:description" content="Uporedite kredite, kartice, štednju i kurseve svih banaka u Srbiji na jednom mestu.">
+<meta name="theme-color" content="#1D4ED8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap">
+<style>
+  :root {
+    --bg: #F1F3F6;
+    --surface: #FFFFFF;
+    --ink: #101828;
+    --ink-2: #4B5565;
+    --ink-3: #8A94A6;
+    --line: #DDE2EA;
+    --line-2: #C9D0DB;
+    --brand: #1D4ED8;
+    --brand-soft: #E4ECFD;
+    --mark: #1D4ED8;
+    --go: #148A4B;
+    --go-ink: #FFFFFF;
+    --go-soft: #DDF3E6;
+    --err: #C62F2F;
+    --shadow: 0 1px 0 rgba(16,24,40,.04), 0 18px 40px -22px rgba(16,24,40,.28);
+    --display: "Manrope", "Golos Text", "Segoe UI", Arial, sans-serif;
+    --body: "Golos Text", "Segoe UI", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0F1420; --surface: #171E2E;
+      --ink: #EEF1F7; --ink-2: #B4BCCB; --ink-3: #7C879B;
+      --line: #2A3448; --line-2: #3A465C;
+      --brand: #6D95FF; --brand-soft: #1E2C55; --mark: #2F5BE0;
+      --go: #37C777; --go-ink: #06210F; --go-soft: #17372A;
+      --err: #F0716B;
+      --shadow: 0 1px 0 rgba(0,0,0,.3), 0 18px 40px -22px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0F1420; --surface: #171E2E;
+    --ink: #EEF1F7; --ink-2: #B4BCCB; --ink-3: #7C879B;
+    --line: #2A3448; --line-2: #3A465C;
+    --brand: #6D95FF; --brand-soft: #1E2C55; --mark: #2F5BE0;
+    --go: #37C777; --go-ink: #06210F; --go-soft: #17372A;
+    --err: #F0716B;
+    --shadow: 0 1px 0 rgba(0,0,0,.3), 0 18px 40px -22px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 18px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+  .page { min-height: 100vh; display: flex; flex-direction: column; }
+  .wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+  /* header */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 28px; }
+  .logo { font-family: var(--display); font-weight: 800; font-size: 29px; letter-spacing: -.035em; line-height: 1; text-decoration: none; }
+  .status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px 8px 12px; border: 1px solid var(--line-2); border-radius: 999px; font-size: 15px; font-weight: 600; color: var(--ink-2); background: var(--surface); }
+  .status .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--brand); position: relative; }
+  .status .dot::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--brand); opacity: 0; animation: ping 2.4s ease-out infinite; }
+  @keyframes ping { 0% { transform: scale(.4); opacity: .7; } 80%, 100% { transform: scale(1.4); opacity: 0; } }
+
+  /* hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: start; padding-block: clamp(24px, 5vw, 56px) 40px; }
+  .eyebrow { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--brand); }
+  h1 { font-family: var(--display); font-weight: 800; font-size: clamp(36px, 4.8vw, 66px); line-height: 1.02; letter-spacing: -.035em; margin: 14px 0 0; }
+  h1 .line { display: block; }
+  .rot { display: block; position: relative; height: 1.08em; overflow: hidden; color: var(--brand); }
+  .rot span { position: absolute; left: 0; top: 0; white-space: nowrap; transition: transform .55s cubic-bezier(.2,.8,.2,1), opacity .4s; }
+  .rot span.out { transform: translateY(-105%); opacity: 0; }
+  .rot span.in { transform: translateY(105%); opacity: 0; }
+  .lead { font-size: 21px; color: var(--ink-2); margin: 24px 0 0; max-width: 34em; }
+  .lead b { color: var(--ink); font-weight: 600; }
+
+  /* what's coming */
+  .coming { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 26px 28px 10px; }
+  .coming h2 { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -.02em; margin: 0; }
+  .coming .sub { font-size: 16px; color: var(--ink-3); margin: 4px 0 8px; }
+  .coming ul { list-style: none; margin: 0; padding: 0; }
+  .coming li { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; padding: 16px 0; border-top: 1px solid var(--line); }
+  .coming li:first-child { border-top: 0; }
+  .ic { width: 44px; height: 44px; border-radius: 10px; background: var(--brand-soft); display: grid; place-items: center; }
+  .ic svg { width: 22px; height: 22px; stroke: var(--brand); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .coming .t { font-weight: 700; font-size: 18px; line-height: 1.3; }
+  .coming .d { font-size: 16px; color: var(--ink-2); line-height: 1.4; margin-top: 2px; }
+
+  /* giant wordmark */
+  .sign { margin-top: auto; position: relative; overflow: hidden; }
+  .sign .word { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(110px, 25vw, 380px); line-height: .78; letter-spacing: -.06em; color: var(--mark); white-space: nowrap; transform: translateY(12%); margin-left: -.04em; animation: rise 1.1s cubic-bezier(.2,.8,.2,1) both; user-select: none; }
+  @keyframes rise { from { transform: translateY(40%); } to { transform: translateY(12%); } }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; font-size: 15px; color: var(--ink-3); padding-block: 8px 20px; }
+
+  @media (max-width: 920px) {
+    .hero { grid-template-columns: 1fr; }
+    .lead { font-size: 19px; }
+  }
+  @media (max-width: 480px) {
+    .coming { padding: 20px 18px 6px; }
+    .status { font-size: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .status .dot::after, .sign .word { animation: none; }
+    .rot span { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="wrap top">
+    <a class="logo" href="/">ebanka</a>
+    <span class="status"><span class="dot" aria-hidden="true"></span>Otvaramo uskoro</span>
+  </header>
+
+  <main class="wrap hero">
+    <section>
+      <div class="eyebrow">Finansijski portal za Srbiju</div>
+      <h1>
+        <span class="line">Uporedite</span>
+        <span class="rot" id="rot" aria-hidden="true"><span>keš kredite</span></span>
+        <span class="line">svih banaka u Srbiji</span>
+        <span class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">kredite, kartice, štednju i kurseve</span>
+      </h1>
+      <p class="lead">Pravimo mesto gde na jednoj strani vidite <b>EKS, rate i naknade</b> svih banaka, dnevnu kursnu listu NBS i iskustva stvarnih korisnika. Bez odlaska od šaltera do šaltera.</p>
+    </section>
+
+    <aside class="coming" aria-labelledby="coming-h">
+      <h2 id="coming-h">Šta pripremamo</h2>
+      <p class="sub">Sve što vam treba pre odlaska u banku</p>
+      <ul>
+        <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M7 12h.01M17 12h.01"/></svg></span><div><div class="t">Krediti</div><div class="d">Keš, stambeni, auto i refinansiranje, poređani po EKS-u</div></div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg></span><div><div class="t">Kartice i računi</div><div class="d">Kreditne kartice i tekući računi sa svim naknadama</div></div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 4 8-8"/><path d="M14 8h6v6"/></svg></span><div><div class="t">Štednja</div><div class="d">Kamate na oročenu štednju u dinarima i evrima</div></div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h12l-3-3M20 16H8l3 3"/></svg></span><div><div class="t">Kursna lista</div><div class="d">Srednji kurs NBS i kursevi u bankama i menjačnicama</div></div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg></span><div><div class="t">Banke i recenzije</div><div class="d">Narodni rejting i iskustva korisnika svake banke</div></div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h3M13 12h3M8 16h3M13 16h3"/></svg></span><div><div class="t">Kalkulatori</div><div class="d">Rata kredita, prinos štednje, konvertor valuta</div></div></li>
+      </ul>
+    </aside>
+  </main>
+
+  <footer class="sign" aria-hidden="true">
+    <span class="word">ebanka</span>
+  </footer>
+  <div class="wrap foot">
+    <span>© 2026 ebanka.rs</span>
+    <span>Nezavisni portal. Nismo banka i ne izdajemo kredite.</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  var words = ['keš kredite', 'stambene kredite', 'kreditne kartice', 'štednju', 'tekuće račune', 'kurseve evra'];
+  var box = document.getElementById('rot');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var i = 0;
+  setInterval(function () {
+    i = (i + 1) % words.length;
+    var cur = box.firstElementChild;
+    if (reduce) { cur.textContent = words[i]; return; }
+    var next = document.createElement('span');
+    next.className = 'in'; next.textContent = words[i];
+    box.appendChild(next);
+    void next.offsetWidth;
+    next.className = ''; cur.className = 'out';
+    setTimeout(function () { cur.remove(); }, 600);
+  }, 2600);
+})();
+</script>
+</body>
+</html>

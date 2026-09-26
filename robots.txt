@@ -1,0 +1,4 @@
+# Sajt je u pripremi. Stranice su zatvorene od indeksiranja preko meta robots i X-Robots-Tag (noindex).
+# Crawling je namerno dozvoljen da bi pretrazivaci videli noindex.
+User-agent: *
+Allow: /
