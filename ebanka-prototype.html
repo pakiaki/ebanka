@@ -145,7 +145,7 @@
   .tabs { display: flex; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
   .tabs button { flex: none; background: none; border: 0; padding: 18px 22px; font-size: 17px; font-weight: 600; color: var(--ink-2); border-bottom: 3px solid transparent; margin-bottom: -1px; }
   .tabs button[aria-selected="true"] { color: var(--brand); border-bottom-color: var(--brand); }
-  .picker-body { display: grid; grid-template-columns: 1.1fr 1.1fr 1fr auto; gap: 18px; padding: 22px; align-items: end; }
+  .picker-body { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr) minmax(0, 1fr) auto; gap: 18px; padding: 22px; align-items: end; }
   .field label { display: block; font-size: 15px; font-weight: 600; color: var(--ink-2); margin-bottom: 8px; }
   .field .in { display: flex; align-items: center; border: 1px solid var(--line-2); border-radius: 8px; height: 56px; padding: 0 14px; background: var(--surface); gap: 8px; }
   .field .in input { flex: 1; border: 0; background: transparent; font: inherit; font-size: 22px; font-weight: 700; color: var(--ink); min-width: 0; }
@@ -248,7 +248,7 @@
     .offer { grid-template-columns: 1fr 1fr 1fr; }
     .offer .bank { grid-column: 1 / -1; }
     .offer .btn { grid-column: 1 / -1; }
-    .picker-body { grid-template-columns: 1fr 1fr; }
+    .picker-body { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
     .result { border-left: 0; padding-left: 0; }
   }
   @media (max-width: 900px) {
@@ -260,9 +260,15 @@
   @media (max-width: 560px) {
     body { font-size: 17px; }
     h2 { font-size: 28px; }
-    .picker-body { grid-template-columns: 1fr; }
+    .picker-body { grid-template-columns: minmax(0, 1fr); padding: 18px; }
+    .rating th:nth-child(n+4), .rating td:nth-child(n+4) { display: none; }
+    .rating th, .rating td { padding-inline: 10px; }
+    .rating .pos { width: 28px; padding-left: 14px; }
+    .rating .stars { display: none; }
+    .rating .score::after { content: "★"; color: var(--star); font-size: 18px; }
     .offer { grid-template-columns: 1fr 1fr; padding: 16px; }
-    .fcols { grid-template-columns: 1fr; }
+    .fcols { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
+    .fcols > div:first-child { grid-column: 1 / -1; }
     .top-row { gap: 14px; }
     .city-btn .city-name { display: none; }
   }
